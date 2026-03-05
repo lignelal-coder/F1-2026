@@ -1,0 +1,44 @@
+# F1-2026
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédictions F1 2026</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Prédictions F1 2026</h1>
+    <div class="participants">
+        <div class="participant">
+            <h2>Alan</h2>
+            <div class="predictions"></div>
+        </div>
+        <div class="participant">
+            <h2>Alexandre</h2>
+            <div class="predictions"></div>
+        </div>
+        <div class="participant">
+            <h2>Mathéo</h2>
+            <div class="predictions"></div>
+        </div>
+    </div>
+    <div class="leaderboard">
+        <h2>Classement</h2>
+        <table id="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Participant</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Alan</td><td id="points-alan">0</td></tr>
+                <tr><td>Alexandre</td><td id="points-alexandre">0</td></tr>
+                <tr><td>Mathéo</td><td id="points-matheo">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
