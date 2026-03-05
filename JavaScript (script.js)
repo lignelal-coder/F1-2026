@@ -1,0 +1,99 @@
+// Liste des Grands Prix 2026
+const gps2026 = [
+    "Bahrein", "Arabie Saoudite", "Australie", "Azerbaïdjan", "Miami", "Imola",
+    "Monaco", "Espagne", "Canada", "Autriche", "Grande-Bretagne", "Hongrie",
+    "Belgique", "Pays-Bas", "Italie", "Singapour", "Japon", "Qatar",
+    "États-Unis (Austin)", "Mexique", "Brésil", "Las Vegas", "Abou Dhabi"
+];
+
+// Initialisation des prédictions et des points
+let predictions = {
+    "Alan": {},
+    "Alexandre": {},
+    "Mathéo": {}
+};
+
+let points = {
+    "Alan": 0,
+    "Alexandre": 0,
+    "Mathéo": 0
+};
+
+// Charger les prédictions depuis le stockage local (si disponibles)
+function loadPredictions() {
+    const savedPredictions = localStorage.getItem('predictions');
+    if (savedPredictions) {
+        predictions = JSON.parse(savedPredictions);
+    }
+    const savedPoints = localStorage.getItem('points');
+    if (savedPoints) {
+        points = JSON.parse(savedPoints);
+        updateLeaderboard();
+    }
+}
+
+// Sauvegarder les prédictions et les points
+function savePredictions() {
+    localStorage.setItem('predictions', JSON.stringify(predictions));
+    localStorage.setItem('points', JSON.stringify(points));
+}
+
+// Mettre à jour le classement
+function updateLeaderboard() {
+    document.getElementById('points-alan').textContent = points["Alan"];
+    document.getElementById('points-alexandre').textContent = points["Alexandre"];
+    document.getElementById('points-matheo').textContent = points["Mathéo"];
+}
+
+// Créer les formulaires de prédiction pour chaque participant
+function createPredictionForms() {
+    const participants = ["Alan", "Alexandre", "Mathéo"];
+    participants.forEach(participant => {
+        const predictionsDiv = document.querySelector(`.participant h2:contains("${participant}")`).nextElementSibling;
+        gps2026.forEach(gp => {
+            const gpDiv = document.createElement('div');
+            gpDiv.className = 'gp-prediction';
+            gpDiv.innerHTML = `
+                <h3>${gp}</h3>
+                <label>1ère place: <input type="text" data-gp="${gp}" data-place="1" data-participant="${participant}"></label><br>
+                <label>2ème place: <input type="text" data-gp="${gp}" data-place="2" data-participant="${participant}"></label><br>
+                <label>3ème place: <input type="text" data-gp="${gp}" data-place="3" data-participant="${participant}"></label>
+            `;
+            predictionsDiv.appendChild(gpDiv);
+        });
+    });
+}
+
+// Ajouter un événement pour sauvegarder les prédictions
+document.addEventListener('input', (e) => {
+    if (e.target.tagName === 'INPUT') {
+        const gp = e.target.dataset.gp;
+        const place = e.target.dataset.place;
+        const participant = e.target.dataset.participant;
+        if (!predictions[participant][gp]) {
+            predictions[participant][gp] = {};
+        }
+        predictions[participant][gp][place] = e.target.value;
+        savePredictions();
+    }
+});
+
+// Simuler l'ajout de résultats réels et calculer les points
+function addRealResults(gp, results) {
+    const participants = ["Alan", "Alexandre", "Mathéo"];
+    participants.forEach(participant => {
+        if (predictions[participant][gp]) {
+            let participantPoints = 0;
+            if (predictions[participant][gp]["1"] === results[0]) participantPoints += 5;
+            if (predictions[participant][gp]["2"] === results[1]) participantPoints += 3;
+            if (predictions[participant][gp]["3"] === results[2]) participantPoints += 1;
+            points[participant] += participantPoints;
+        }
+    });
+    savePredictions();
+    updateLeaderboard();
+}
+
+// Charger les prédictions au démarrage
+loadPredictions();
+createPredictionForms();
